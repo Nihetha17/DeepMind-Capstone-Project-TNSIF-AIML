@@ -3,6 +3,7 @@ const checkButton = document.getElementById("checkButton");
 const prediction = document.getElementById("prediction");
 const confidence = document.getElementById("confidence");
 const resultText = document.querySelector(".result-text");
+const result = document.getElementById("result");
 
 // Backend API
 const API_URL = "http://127.0.0.1:8000/predict";
@@ -19,9 +20,10 @@ checkButton.addEventListener("click", async () => {
     prediction.textContent = "Checking...";
     confidence.textContent = "--";
     resultText.textContent = "Analyzing your email...";
+    result.dataset.state = "checking";
 
     checkButton.disabled = true;
-    checkButton.textContent = "Checking...";
+    checkButton.innerHTML = 'Analyzing... <span aria-hidden="true">↗</span>';
 
     try {
 
@@ -42,12 +44,18 @@ checkButton.addEventListener("click", async () => {
         }
 
         prediction.textContent = data.prediction;
-        confidence.textContent = (data.confidence * 100).toFixed(2) +"%";
+        const confidenceValue = Number(data.confidence);
+        const confidencePercent = Number.isFinite(confidenceValue)
+            ? Math.min(100, Math.max(0, confidenceValue * 100))
+            : 0;
+        confidence.textContent = confidencePercent.toFixed(2) + "%";
 
         if (data.prediction.toLowerCase() === "spam") {
-            resultText.textContent = "⚠️ This email appears to be Spam.";
+            result.dataset.state = "spam";
+            resultText.textContent = "This message matches common spam patterns.";
         } else {
-            resultText.textContent = "✅ This email appears to be Not Spam.";
+            result.dataset.state = "ham";
+            resultText.textContent = "This message appears to be legitimate.";
         }
 
     } catch (error) {
@@ -56,6 +64,7 @@ checkButton.addEventListener("click", async () => {
 
         prediction.textContent = "Error";
         confidence.textContent = "--";
+        result.dataset.state = "error";
         resultText.textContent = "Unable to connect to the server.";
 
         alert("Could not connect to the FastAPI backend.");
@@ -63,6 +72,6 @@ checkButton.addEventListener("click", async () => {
     } finally {
 
         checkButton.disabled = false;
-        checkButton.textContent = "Check Email";
+        checkButton.innerHTML = 'Analyze message <span aria-hidden="true">↗</span>';
     }
 });

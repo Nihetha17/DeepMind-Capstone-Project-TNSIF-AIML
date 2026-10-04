@@ -11,9 +11,9 @@ from pydantic import BaseModel
 MODEL_PATH = Path(__file__).resolve().parent / "kmeans_model.pkl"
 
 PERSONA_MAP = {
-    0: "KANJA PISNARI",
-    1: "SELEVALI",
-    2: "UDHARI",
+    0: "Careful Spenders",
+    1: "Top Spenders",
+    2: "Frequent Buyers",
 }
 
 

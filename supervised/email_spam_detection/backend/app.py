@@ -62,3 +62,6 @@ def predict(request: EmailRequest):
         "label": int(prediction),
         "confidence": round(float(confidence), 4)
     }
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)

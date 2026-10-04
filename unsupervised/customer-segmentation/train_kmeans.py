@@ -7,7 +7,7 @@ import numpy as np
 customer_data = pd.read_csv("customers.csv")
 X = customer_data[["annual_income_k", "spending_score"]]
 
-# Standard Scaler
+
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
@@ -52,10 +52,10 @@ while True:
     cluster = kmeans.predict(new_customer)
 
     if cluster[0] == 2:
-        print("UDHARI")
+        print("Frequent Buyers")
     elif cluster[0] == 1:
-        print("SELEVALI")
+        print("Top Spenders")
     else:
-        print("KANJA PISNARI")
+        print("Careful Spenders")
 
     print("Cluster:", cluster[0])
